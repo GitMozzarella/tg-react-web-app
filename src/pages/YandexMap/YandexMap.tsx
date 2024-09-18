@@ -28,11 +28,5 @@ export const YandexMap = () => {
 		}
 	}, [mapContainer])
 
-	return (
-		<div
-			id='map'
-			ref={setMapContainer}
-			style={{ width: '100%', height: '400px' }}
-		/>
-	)
+	return <div id='map' ref={setMapContainer} />
 }
