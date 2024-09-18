@@ -8,14 +8,17 @@ export const YandexMap = () => {
 	useEffect(() => {
 		async function initMap() {
 			try {
-				const { YMap, YMapDefaultSchemeLayer } = await initYMaps()
+				console.log('Начинаю инициализацию карты') // Лог
+				const { YMap, YMapDefaultSchemeLayer } = await initYMaps() // Инициализация карты
+				console.log('Компоненты карты загружены', YMap, YMapDefaultSchemeLayer) // Лог
 
 				const map = new YMap(mapContainer as HTMLElement, {
 					location: {
-						center: [55.751244, 37.618423],
+						center: [55.751244, 37.618423], // Координаты центра карты (Москва)
 						zoom: 9
 					}
 				})
+				console.log('Карта создана', map) // Лог
 
 				map.addChild(new YMapDefaultSchemeLayer({}))
 			} catch (error) {
@@ -24,7 +27,10 @@ export const YandexMap = () => {
 		}
 
 		if (mapContainer) {
-			initMap()
+			console.log('Контейнер карты готов') // Лог
+			initMap() // Запуск инициализации только после готовности контейнера
+		} else {
+			console.log('Контейнер карты не готов') // Лог
 		}
 	}, [mapContainer])
 
