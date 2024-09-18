@@ -4,14 +4,10 @@ import './App.css'
 import { useTelegram } from './hooks/useTelegram'
 
 export const App = () => {
-	const tg = useTelegram()
+	const { tg, onClose } = useTelegram()
 	useEffect(() => {
 		tg.ready()
 	}, [])
-
-	const onClose = () => {
-		tg.close()
-	}
 
 	return (
 		<div className='App'>

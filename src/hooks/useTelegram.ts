@@ -1,7 +1,13 @@
-import { useMemo } from 'react'
+const tg = window.Telegram.WebApp
 
 export function useTelegram() {
-	const tg = useMemo(() => window.Telegram?.WebApp, [])
+	const onClose = () => {
+		tg.close()
+	}
 
-	return tg
+	return {
+		tg,
+		onClose,
+		user: tg.initDataUnsafe?.user
+	}
 }
