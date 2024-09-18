@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { initMapComponents } from './../../../lib/ymaps'
+import { initMapComponents } from '../../lib/ymaps'
 
 export const YandexMap: React.FC = () => {
 	const [mapContainer, setMapContainer] = useState<HTMLElement | null>(null)
