@@ -18,7 +18,7 @@ export const App = () => {
 			<Header />
 			<Routes>
 				<Route index element={<Home />} />
-				<Route path={'/yandexmap'} element={<YandexMap />} />
+				<Route path={'yandexmap'} element={<YandexMap />} />
 			</Routes>
 		</div>
 	)
