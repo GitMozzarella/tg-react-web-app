@@ -1,5 +1,5 @@
 import './map.css'
 
 export const YandexMap = () => {
-	return <div>map</div>
+	return <div className='map'>вапиываптивыаптываптваыпт</div>
 }
