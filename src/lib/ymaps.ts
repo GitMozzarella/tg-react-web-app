@@ -1,22 +1,17 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 
-// Теперь TypeScript знает о наличии ymaps3 на window
-const ymaps3 = window.ymaps3
+const ymaps3 = window.ymaps3 // Обращаемся к глобальному объекту
 
-const initYmaps = async () => {
+export const initYMaps = async () => {
+	// Ожидаем загрузки всех компонентов
 	const [ymaps3React] = await Promise.all([
 		ymaps3.import('@yandex/ymaps3-reactify'),
 		ymaps3.ready
 	])
 
-	return ymaps3React
-}
-
-export const initMapComponents = async () => {
-	const ymaps3React = await initYmaps()
-
 	const reactify = ymaps3React.reactify.bindTo(React, ReactDOM)
 
+	// Экспортируем компоненты карты и слоя через reactify
 	return reactify.module(ymaps3)
 }

@@ -1,14 +1,17 @@
 import React, { useEffect, useState } from 'react'
-import { initMapComponents } from '../../lib/ymaps'
-
+import { initYMaps } from './../../lib/ymaps'
 export const YandexMap: React.FC = () => {
 	const [mapContainer, setMapContainer] = useState<HTMLElement | null>(null)
 	const [YMapComponents, setYMapComponents] = useState<any>(null)
 
 	useEffect(() => {
 		const loadMap = async () => {
-			const { YMap, YMapDefaultSchemeLayer } = await initMapComponents()
-			setYMapComponents({ YMap, YMapDefaultSchemeLayer })
+			try {
+				const { YMap, YMapDefaultSchemeLayer } = await initYMaps()
+				setYMapComponents({ YMap, YMapDefaultSchemeLayer })
+			} catch (error) {
+				console.error('Ошибка инициализации карты:', error)
+			}
 		}
 		loadMap()
 	}, [])
@@ -22,7 +25,9 @@ export const YandexMap: React.FC = () => {
 					zoom: 10
 				}
 			})
-			map.addChild(new YMapDefaultSchemeLayer())
+
+			const layer = new YMapDefaultSchemeLayer()
+			map.addChild(layer)
 		}
 	}, [mapContainer, YMapComponents])
 
