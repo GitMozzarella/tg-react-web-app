@@ -1,10 +1,13 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 
-const ymaps3 = window.ymaps3 // Обращаемся к глобальному объекту
+const ymaps3 = (window as any).ymaps3
 
 export const initYMaps = async () => {
-	// Ожидаем загрузки всех компонентов
+	if (!ymaps3) {
+		throw new Error('YMaps API не загружен')
+	}
+
 	const [ymaps3React] = await Promise.all([
 		ymaps3.import('@yandex/ymaps3-reactify'),
 		ymaps3.ready
@@ -12,6 +15,5 @@ export const initYMaps = async () => {
 
 	const reactify = ymaps3React.reactify.bindTo(React, ReactDOM)
 
-	// Экспортируем компоненты карты и слоя через reactify
 	return reactify.module(ymaps3)
 }
