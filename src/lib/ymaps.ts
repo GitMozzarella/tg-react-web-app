@@ -1,15 +1,37 @@
 import React from 'react'
-import ReactDom from 'react-dom'
+import ReactDOM from 'react-dom'
 
-const [ymaps3React] = await Promise.all([
-	ymaps3.import('@yandex/ymaps3-reactify'),
-	ymaps3.ready
-])
+let reactify: any
+let YMap: any,
+	YMapDefaultSchemeLayer: any,
+	YMapDefaultFeaturesLayer: any,
+	YMapMarker: any
 
-export const reactify = ymaps3React.reactify.bindTo(React, ReactDom)
-export const {
+export const loadYMaps = async () => {
+	try {
+		const [ymaps3React] = await Promise.all([
+			window.ymaps3.import('@yandex/ymaps3-reactify'),
+			window.ymaps3.ready
+		])
+
+		reactify = ymaps3React.reactify.bindTo(React, ReactDOM)
+		YMap = reactify.module(window.ymaps3).YMap
+		YMapDefaultSchemeLayer = reactify.module(
+			window.ymaps3
+		).YMapDefaultSchemeLayer
+		YMapDefaultFeaturesLayer = reactify.module(
+			window.ymaps3
+		).YMapDefaultFeaturesLayer
+		YMapMarker = reactify.module(window.ymaps3).YMapMarker
+	} catch (error) {
+		console.error('Ошибка при загрузке Yandex.Maps:', error)
+	}
+}
+
+export {
+	reactify,
 	YMap,
 	YMapDefaultSchemeLayer,
 	YMapDefaultFeaturesLayer,
 	YMapMarker
-} = reactify.module(ymaps3)
+}
