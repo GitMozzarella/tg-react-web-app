@@ -9,8 +9,8 @@ import {
 import type { YMapLocationRequest } from 'ymaps3'
 
 const LOCATION: YMapLocationRequest = {
-	center: [37.588144, 55.733842],
-	zoom: 9
+	center: [37.588144, 55.733842], // Центр карты
+	zoom: 9 // Масштаб карты
 }
 
 export const YandexMap = () => {
@@ -22,10 +22,28 @@ export const YandexMap = () => {
 
 				<YMapMarker
 					coordinates={reactify.useDefault([37.588144, 55.733842])}
-					draggable={true}
+					draggable={false}
 				>
 					<section>
-						<h1>You can drag this header</h1>
+						<h1>Метка 1</h1>
+					</section>
+				</YMapMarker>
+
+				<YMapMarker
+					coordinates={reactify.useDefault([37.6, 55.733842])}
+					draggable={false}
+				>
+					<section>
+						<h1>Метка 2</h1>
+					</section>
+				</YMapMarker>
+
+				<YMapMarker
+					coordinates={reactify.useDefault([37.61, 55.74])}
+					draggable={false}
+				>
+					<section>
+						<h1>Метка 3</h1>
 					</section>
 				</YMapMarker>
 			</YMap>
