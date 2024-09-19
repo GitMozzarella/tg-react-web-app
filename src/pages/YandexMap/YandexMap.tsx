@@ -1,26 +1,34 @@
 import './map.css'
-import { YMaps, Map, Placemark } from '@pbe/react-yandex-maps'
+import {
+	YMap,
+	YMapDefaultSchemeLayer,
+	YMapDefaultFeaturesLayer,
+	YMapMarker,
+	reactify
+} from './../../lib/ymaps'
+import type { YMapLocationRequest } from 'ymaps3'
+
+const LOCATION: YMapLocationRequest = {
+	center: [37.588144, 55.733842],
+	zoom: 9
+}
 
 export const YandexMap = () => {
 	return (
-		<YMaps>
-			<Map
-				defaultState={{
-					center: [55.75, 37.57],
-					zoom: 9,
-					controls: ['zoomControl', 'fullscreenControl']
-				}}
-				modules={['control.ZoomControl', 'control.FullscreenControl']}
-			>
-				<Placemark
-					modules={['geoObject.addon.balloon']}
-					defaultGeometry={[55.75, 37.57]}
-					properties={{
-						balloonContentBody:
-							'This is balloon loaded by the Yandex.Maps API module system'
-					}}
-				/>
-			</Map>
-		</YMaps>
+		<div style={{ width: '600px', height: '400px' }}>
+			<YMap location={reactify.useDefault(LOCATION)}>
+				<YMapDefaultSchemeLayer />
+				<YMapDefaultFeaturesLayer />
+
+				<YMapMarker
+					coordinates={reactify.useDefault([37.588144, 55.733842])}
+					draggable={true}
+				>
+					<section>
+						<h1>You can drag this header</h1>
+					</section>
+				</YMapMarker>
+			</YMap>
+		</div>
 	)
 }
