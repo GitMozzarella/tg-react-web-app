@@ -9,23 +9,45 @@ export const YandexMap = () => {
 			})
 
 			const clusterer: any = new window.ymaps.Clusterer({
-				preset: 'islands#invertedVioletClusterIcons'
+				preset: 'islands#invertedVioletClusterIcons',
+				groupByCoordinates: false
 			})
 
 			const points = [
-				[55.751574, 37.573856],
-				[55.761574, 37.573856]
+				{
+					coords: [55.754172, 37.623378],
+					header: 'Метка 1',
+					body: 'Столовая 57'
+				},
+				{
+					coords: [55.753432, 37.621586],
+					header: 'Метка 2',
+					body: 'Красная площадь'
+				},
+				{
+					coords: [55.752465, 37.62739],
+					header: 'Метка 3',
+					body: 'Церковь Максима Блаженного'
+				}
 			]
 
 			const geoObjects = points.map(
 				point =>
-					new window.ymaps.Placemark(point, {
-						balloonContentHeader: 'Метка',
-						balloonContentBody: 'Описание метки'
-					})
+					new window.ymaps.Placemark(
+						point.coords,
+						{
+							balloonContentHeader: point.header,
+							balloonContentBody: point.body
+						},
+						{
+							preset: 'islands#icon',
+							iconColor: '#3b5998'
+						}
+					)
 			)
 
 			clusterer.add(geoObjects)
+
 			map.geoObjects.add(clusterer)
 		}
 
