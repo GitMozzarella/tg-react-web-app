@@ -1,119 +1,143 @@
 import { useEffect } from 'react'
+import { loadYandexModules } from './../../ymapsLoader'
 
 export const YandexMap = () => {
 	useEffect(() => {
-		const loadMap = () => {
-			const map: any = new window.ymaps.Map('map', {
-				center: [55.751574, 37.573856],
-				zoom: 9
-			})
+		const loadMap = async () => {
+			if (window.myMap) {
+				return
+			}
 
-			const clusterer: any = new window.ymaps.Clusterer({
-				preset: 'islands#invertedVioletClusterIcons',
-				groupByCoordinates: false
-			})
+			try {
+				const [Map, Placemark, Clusterer, Heatmap] = await loadYandexModules()
 
-			const points = [
-				// Красная площадь и окрестности
-				{
-					coords: [55.7558, 37.6173],
-					header: 'Красная площадь',
-					body: 'Центральная площадь Москвы, место проведения государственных праздников и мероприятий.'
-				},
-				{
-					coords: [55.7577, 37.6156],
-					header: 'Исторический музей',
-					body: 'Музей истории России, расположенный на северо-западной стороне Красной площади.'
-				},
-				{
-					coords: [55.7549, 37.6204],
-					header: 'ГУМ',
-					body: 'Главный универсальный магазин Москвы, расположенный на восточной стороне Красной площади.'
-				},
-				{
-					coords: [55.7563, 37.6139],
-					header: 'Мавзолей Ленина',
-					body: 'Место захоронения Владимира Ленина на Красной площади.'
-				},
-				{
-					coords: [55.7588, 37.6187],
-					header: 'Собор Василия Блаженного',
-					body: 'Один из самых узнаваемых архитектурных символов России, расположенный на южной стороне Красной площади.'
-				},
+				window.myMap = new Map('map', {
+					center: [55.751574, 37.573856],
+					zoom: 9
+				})
 
-				//Арбат и окрестности
-				{
-					coords: [55.7517, 37.5783],
-					header: 'Арбат',
-					body: 'Историческая улица Москвы, известная своими артистами, сувенирами и атмосферой старого города.'
-				},
-				{
-					coords: [55.7501, 37.5805],
-					header: 'Дом-музей А.С. Пушкина',
-					body: 'Мемориальный дом-музей великого русского поэта Александра Сергеевича Пушкина.'
-				},
-				{
-					coords: [55.7525, 37.5772],
-					header: 'Смоленская площадь',
-					body: 'Крупная транспортная развязка на западе центра Москвы, рядом с Арбатом.'
-				},
-				{
-					coords: [55.7493, 37.5764],
-					header: 'Здание МИД России',
-					body: 'Одно из семи сталинских высоток, построенное в середине XX века, штаб-квартира Министерства иностранных дел.'
-				},
-				{
-					coords: [55.7532, 37.5819],
-					header: 'Новоарбатский мост',
-					body: 'Мост через Москву-реку, соединяющий Новый Арбат с районом Киевской.'
-				},
+				const clusterer = new Clusterer({
+					preset: 'islands#invertedVioletClusterIcons',
+					groupByCoordinates: false,
+					clusterDisableClickZoom: true,
+					clusterBalloonContentLayout: 'cluster#balloonCarousel',
+					clusterIconPieChartRadius: 32,
+					clusterIconPieChartCoreRadius: 8,
+					clusterIconPieChartStrokeWidth: 2,
+					gridSize: 100
+				})
+				const points = [
+					// Локация 1
+					{
+						coords: [55.7558, 37.6173],
+						header: 'Красная площадь',
+						body: 'Центральная площадь Москвы.'
+					},
 
-				// Патриаршие пруды и окрестности
-				{
-					coords: [55.7634, 37.62],
-					header: 'Патриаршие пруды',
-					body: 'Один из самых известных парков в Москве, популярное место отдыха горожан и туристов.'
-				},
-				{
-					coords: [55.7645, 37.6174],
-					header: 'Дом Булгакова',
-					body: 'Музей Михаила Булгакова, посвященный великому писателю, автору романа "Мастер и Маргарита".'
-				},
-				{
-					coords: [55.7658, 37.6219],
-					header: 'Малая Бронная улица',
-					body: 'Улица, известная своими театрами и атмосферными кафе, расположенная рядом с Патриаршими прудами.'
-				},
-				{
-					coords: [55.7622, 37.6197],
-					header: 'Театр на Малой Бронной',
-					body: 'Один из старейших театров Москвы, специализирующийся на драматических постановках.'
-				},
-				{
-					coords: [55.7667, 37.623],
-					header: 'Ресторан "Максима"',
-					body: 'Известный ресторан с видом на Патриаршие пруды, популярное место для обедов и ужинов.'
-				}
-			]
+					{
+						coords: [55.7549, 37.6204],
+						header: 'ГУМ',
+						body: 'Главный универсальный магазин Москвы.'
+					},
 
-			const geoObjects = points.map(
-				point =>
-					new window.ymaps.Placemark(
-						point.coords,
-						{
-							balloonContentHeader: point.header,
-							balloonContentBody: point.body
-						},
-						{
-							preset: 'islands#icon',
-							iconColor: '#3b5998'
+					{
+						coords: [55.7588, 37.6187],
+						header: 'Собор Василия Блаженного',
+						body: 'Архитектурный символ России.'
+					},
+
+					// Локация 2
+					{
+						coords: [55.7517, 37.5783],
+						header: 'Арбат',
+						body: 'Историческая улица Москвы.'
+					},
+					{
+						coords: [55.7501, 37.5805],
+						header: 'Дом-музей Пушкина',
+						body: 'Мемориальный дом-музей поэта.'
+					},
+					{
+						coords: [55.7525, 37.5772],
+						header: 'Смоленская площадь',
+						body: 'Транспортная развязка.'
+					},
+					{
+						coords: [55.7493, 37.5764],
+						header: 'Здание МИД России',
+						body: 'Министерство иностранных дел.'
+					},
+					{
+						coords: [55.7532, 37.5819],
+						header: 'Новоарбатский мост',
+						body: 'Мост через Москву-реку.'
+					},
+
+					// Локация 3
+					{
+						coords: [55.7634, 37.62],
+						header: 'Патриаршие пруды',
+						body: 'Популярное место отдыха.'
+					},
+					{
+						coords: [55.7645, 37.6174],
+						header: 'Дом Булгакова',
+						body: 'Музей Михаила Булгакова.'
+					},
+					{
+						coords: [55.7658, 37.6219],
+						header: 'Малая Бронная улица',
+						body: 'Улица с театрами и кафе.'
+					},
+					{
+						coords: [55.7622, 37.6197],
+						header: 'Театр на Малой Бронной',
+						body: 'Театр Москвы.'
+					},
+					{
+						coords: [55.7667, 37.623],
+						header: 'Ресторан "Максима"',
+						body: 'Ресторан с видом на пруды.'
+					}
+				]
+
+				const geoObjects = points.map(
+					point =>
+						new Placemark(
+							point.coords,
+							{
+								balloonContentHeader: point.header,
+								balloonContentBody: point.body
+							},
+							{
+								preset: 'islands#icon',
+								iconColor: '#3b5998'
+							}
+						)
+				)
+
+				clusterer.add(geoObjects)
+				window.myMap.geoObjects.add(clusterer)
+
+				const heatmap = new Heatmap(
+					points.map(point => point.coords),
+					{
+						radius: 40,
+						opacity: 0.6,
+						intensityOfMidpoint: 0.5,
+						gradient: {
+							0.1: 'rgba(128, 255, 0, 0.7)',
+							0.2: 'rgba(255, 255, 0, 0.8)',
+							0.7: 'rgba(234, 72, 58, 0.9)',
+							1.0: 'rgba(162, 36, 25, 1)'
 						}
-					)
-			)
+					}
+				)
 
-			clusterer.add(geoObjects)
-
-			map.geoObjects.add(clusterer)
+				heatmap.setMap(window.myMap) // Добавляем тепловую карту на карту
+			} catch (error) {
+				console.error('Ошибка загрузки модулей Yandex.Maps:', error)
+			}
 		}
 
 		window.ymaps.ready(loadMap)
