@@ -134,7 +134,7 @@ export const YandexMap = () => {
 					}
 				)
 
-				heatmap.setMap(window.myMap) // Добавляем тепловую карту на карту
+				heatmap.setMap(window.myMap)
 			} catch (error) {
 				console.error('Ошибка загрузки модулей Yandex.Maps:', error)
 			}
@@ -143,5 +143,14 @@ export const YandexMap = () => {
 		window.ymaps.ready(loadMap)
 	}, [])
 
-	return <div id='map' style={{ width: '100%', height: '500px' }}></div>
+	return (
+		<div
+			id='map'
+			style={{
+				width: '800px',
+				height: '500px',
+				margin: '0 auto'
+			}}
+		></div>
+	)
 }
