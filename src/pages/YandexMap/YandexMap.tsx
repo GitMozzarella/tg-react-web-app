@@ -147,8 +147,8 @@ export const YandexMap = () => {
 		<div
 			id='map'
 			style={{
-				width: '800px',
-				height: '500px',
+				width: '100vw',
+				height: '70vh',
 				margin: '0 auto'
 			}}
 		></div>
