@@ -1,52 +1,60 @@
-import './map.css'
-import {
-	YMap,
-	YMapDefaultSchemeLayer,
-	YMapDefaultFeaturesLayer,
-	YMapMarker,
-	reactify
-} from './../../lib/ymaps'
-import type { YMapLocationRequest } from 'ymaps3'
-
-const LOCATION: YMapLocationRequest = {
-	center: [37.588144, 55.733842], // Центр карты
-	zoom: 9 // Масштаб карты
-}
+// @ts-nocheck
+import { useEffect } from 'react'
 
 export const YandexMap = () => {
-	return (
-		<div style={{ width: '600px', height: '400px' }}>
-			<YMap location={reactify.useDefault(LOCATION)}>
-				<YMapDefaultSchemeLayer />
-				<YMapDefaultFeaturesLayer />
+	useEffect(() => {
+		const loadMap = () => {
+			// Инициализация карты
+			const map = new window.ymaps.Map('map', {
+				center: [55.751574, 37.573856], // Москва
+				zoom: 9
+			})
 
-				<YMapMarker
-					coordinates={reactify.useDefault([37.588144, 55.733842])}
-					draggable={false}
-				>
-					<section>
-						<h1>Метка 1</h1>
-					</section>
-				</YMapMarker>
+			// Используем any, чтобы избежать проблем с типами
+			const clusterer: any = new window.ymaps.Clusterer({
+				preset: 'islands#invertedVioletClusterIcons',
+				groupByCoordinates: false,
+				clusterDisableClickZoom: false,
+				clusterOpenBalloonOnClick: true,
+				clusterBalloonContentLayout: 'cluster#balloonCarousel',
+				clusterIconLayout: 'default#pieChart',
+				clusterIconPieChartRadius: 30,
+				clusterIconPieChartCoreRadius: 10,
+				clusterIconPieChartStrokeWidth: 3
+			})
 
-				<YMapMarker
-					coordinates={reactify.useDefault([37.6, 55.733842])}
-					draggable={false}
-				>
-					<section>
-						<h1>Метка 2</h1>
-					</section>
-				</YMapMarker>
+			// Массив с координатами для меток
+			const points = [
+				[55.751574, 37.573856],
+				[55.761574, 37.573856],
+				[55.771574, 37.583856],
+				[55.781574, 37.593856]
+			]
 
-				<YMapMarker
-					coordinates={reactify.useDefault([37.61, 55.74])}
-					draggable={false}
-				>
-					<section>
-						<h1>Метка 3</h1>
-					</section>
-				</YMapMarker>
-			</YMap>
-		</div>
-	)
+			// Создание меток на основе массива координат
+			const geoObjects = points.map(
+				point =>
+					new window.ymaps.Placemark(
+						point,
+						{
+							balloonContentHeader: 'Заголовок',
+							balloonContentBody: 'Описание метки'
+						},
+						{
+							preset: 'islands#icon',
+							iconColor: '#3b5998'
+						}
+					)
+			)
+
+			// Добавление меток в кластеризатор
+			clusterer.add(geoObjects)
+			// Добавление кластеризатора на карту
+			map.geoObjects.add(clusterer)
+		}
+
+		window.ymaps.ready(loadMap)
+	}, [])
+
+	return <div id='map' style={{ width: '100%', height: '500px' }}></div>
 }
